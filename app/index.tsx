@@ -1,26 +1,13 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Image, Text, View } from "react-native";
 
-const DashboardIcon= require("@/assets/images/TabIcons/dashboard.png");
-const ExpensesIcon= require("@/assets/images/TabIcons/expenses.png");
-const DeveloperIcon= require("@/assets/images/TabIcons/user.png");
+import DashboardTab from "./tabs/DashboardTab";
+import ExpensesTab from "./tabs/ExpensesTab";
+import DeveloperTab from "./tabs/DeveloperTab";
 
-
-const DashboardTab = () => (
-  <View className=" h-full bg-white">
-    <Text className=" font-rubik-bold">Dashboard</Text>
-  </View>
-);
-const ExpenseTab = () => (
-  <View>
-    <Text>Expense</Text>
-  </View>
-);
-const DeveloperTab = () => (
-  <View>
-    <Text>Developer</Text>
-  </View>
-);
+const DashboardIcon = require("@/assets/images/TabIcons/dashboard.png");
+const ExpensesIcon = require("@/assets/images/TabIcons/expenses.png");
+const DeveloperIcon = require("@/assets/images/TabIcons/user.png");
 
 const Tab = createBottomTabNavigator();
 
@@ -38,7 +25,7 @@ export default function Index() {
         },
         tabBarLabelStyle: {
           fontSize: 12,
-          fontFamily:"rubik-medium"
+          fontFamily: "rubik-medium",
         },
         headerShown: false,
         tabBarIcon: ({ focused }) => {
@@ -46,7 +33,7 @@ export default function Index() {
 
           if (route.name === "Dashboard") {
             iconSource = DashboardIcon;
-          } else if (route.name === "Expense") {
+          } else if (route.name === "Expenses") {
             iconSource = ExpensesIcon;
           } else if (route.name === "Developer") {
             iconSource = DeveloperIcon;
@@ -67,7 +54,7 @@ export default function Index() {
       })}
     >
       <Tab.Screen name="Dashboard" component={DashboardTab} />
-      <Tab.Screen name="Expense" component={ExpenseTab} />
+      <Tab.Screen name="Expenses" component={ExpensesTab} />
       <Tab.Screen name="Developer" component={DeveloperTab} />
     </Tab.Navigator>
   );
