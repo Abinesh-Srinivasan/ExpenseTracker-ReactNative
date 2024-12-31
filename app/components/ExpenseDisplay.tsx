@@ -7,8 +7,8 @@ import {
   Image,
 } from "react-native";
 
-const editIcon = require("@/assets/icons/edit.png");
-const deleteIcon = require("@/assets/icons/delete.png");
+const editIcon = require("@/assets/images/ExpenseCardIcons/edit.png");
+const deleteIcon = require("@/assets/images/ExpenseCardIcons/delete.png");
 
 const ExpenseDisplay = () => {
   const exampleExpenses = [
