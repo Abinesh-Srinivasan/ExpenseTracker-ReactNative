@@ -1,20 +1,18 @@
 import { useState } from "react";
-import { View, Text, FlatList, TouchableOpacity, Image } from "react-native";
+import {
+  View,
+  Text,
+  FlatList,
+  TouchableOpacity,
+  Image,
+  TextInput,
+} from "react-native";
 
 const editIcon = require("@/assets/images/ExpenseCardIcons/edit.png");
 const deleteIcon = require("@/assets/images/ExpenseCardIcons/delete.png");
 
 const ExpenseDisplay = () => {
-  const [showPopup, setShowPopup] = useState(false);
-  const [popupItem, setPopupItem] = useState<{
-    category: string;
-    amount: number;
-    date: string;
-    id: number;
-    description: string;
-  } | null>(null);
-
-  const exampleExpenses = [
+  const [expenses, setExpenses] = useState([
     {
       id: 0,
       category: "Food",
@@ -77,7 +75,22 @@ const ExpenseDisplay = () => {
       description:
         "Hi, this is Nesharo, hello, how are youshflsh, farith suresh ganesh raja diljaz abhimanyu, Hi, this is Nesharo, hello, how are youshflsh, Hi, this is Nesharo",
     },
-  ];
+  ]);
+  const [showPopup, setShowPopup] = useState(false);
+  const [popupItem, setPopupItem] = useState<{
+    category: string;
+    amount: number;
+    date: string;
+    id: number;
+    description: string;
+  } | null>(null);
+  const [editExpense, setEditExpense] = useState<{
+    category: string;
+    amount: number;
+    date: string;
+    id: number;
+    description: string;
+  } | null>(null);
 
   type Expense = {
     id: number;
@@ -97,9 +110,41 @@ const ExpenseDisplay = () => {
     setPopupItem(null);
   };
 
+  const handleEditOpen = (item: Expense) => {
+    setEditExpense(item);
+  };
+
+  const handleEditChange = (field: string, value: string) => {
+    if (field === "amount") {
+      if (value === "") {
+        setEditExpense((prev) => (prev ? { ...prev, [field]: 0 } : null));
+      } else {
+        const numericValue = parseFloat(value);
+        setEditExpense((prev) =>
+          prev ? { ...prev, [field]: numericValue } : null
+        );
+      }
+    } else {
+      setEditExpense((prev) => (prev ? { ...prev, [field]: value } : null));
+    }
+  };
+
+  const handleEditSave = () => {
+    setExpenses((prev) =>
+      prev.map((expense) =>
+        expense.id === editExpense?.id ? editExpense : expense
+      )
+    );
+    setEditExpense(null);
+  };
+
+  const handleEditCancel = () => {
+    setEditExpense(null);
+  };
+
   const renderExpenseCard = ({ item }: { item: Expense }) => {
-    let date = item.date;
-    item.date = date.split("-").reverse().join("-");
+    // let date = item.date;
+    // item.date = date.split("-").reverse().join("-");
     return (
       <View className=" flex flex-row mt-5 border border-t-white border-l-white border-r-white border-b-gray-300 px-6 pb-4 items-center justify-between">
         {/* Category,Amount,Date */}
@@ -121,10 +166,13 @@ const ExpenseDisplay = () => {
             onPress={() => handlePopupOpen(item)}
           >
             <Text className=" font-rubik-regular tracking-wide text-white">
-              Read
+              More
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity className="border border-white px-3 py-1 rounded-lg bg-orange-500">
+          <TouchableOpacity
+            className="border border-white px-3 py-1 rounded-lg bg-orange-500"
+            onPress={() => handleEditOpen(item)}
+          >
             <Image source={editIcon} className=" size-6" />
           </TouchableOpacity>
           <TouchableOpacity className="border border-white px-3 py-1 rounded-lg bg-red-500">
@@ -139,7 +187,7 @@ const ExpenseDisplay = () => {
     <View className=" px-6 mt-3">
       <FlatList
         showsVerticalScrollIndicator={false}
-        data={exampleExpenses}
+        data={expenses}
         keyExtractor={(item) => item.id.toString()}
         renderItem={renderExpenseCard}
       />
@@ -167,6 +215,62 @@ const ExpenseDisplay = () => {
               Close
             </Text>
           </TouchableOpacity>
+        </View>
+      )}
+      {/* edit form */}
+      {editExpense && (
+        <View className=" absolute top-28 w-11/12 left-10 bg-white h-[35rem] flex flex-col px-10 gap-10 py-8 shadow-black shadow-lg rounded-2xl">
+          <Text className=" text-center font-rubik-bold text-2xl tracking-wide">
+            Edit Expense{" "}
+          </Text>
+          <View className=" flex flex-col gap-4">
+            <TextInput
+              placeholder="Category"
+              value={editExpense.category}
+              maxLength={10}
+              onChangeText={(text) => handleEditChange("category", text)}
+              className=" font-rubik-regular border border-gray-300 rounded-md pl-3"
+            />
+            <TextInput
+              placeholder="Amount"
+              value={editExpense.amount.toString()}
+              maxLength={10}
+              onChangeText={(text) => handleEditChange("amount", text)}
+              keyboardType="numeric"
+              className=" font-rubik-regular border border-gray-300 rounded-md pl-3"
+            />
+            <TextInput
+              placeholder="DD-MM-YYYY"
+              value={editExpense.date}
+              keyboardType="numeric"
+              maxLength={10}
+              onChangeText={(text) => handleEditChange("date", text)}
+              className=" font-rubik-regular border border-gray-300 rounded-md pl-3"
+            />
+            <TextInput
+              placeholder="Description"
+              value={editExpense.description}
+              multiline
+              maxLength={157}
+              onChangeText={(text) => handleEditChange("description", text)}
+              className=" font-rubik-regular border border-gray-300 rounded-md pl-3 h-32"
+              style={{ textAlignVertical: "top" }}
+            />
+          </View>
+          <View className=" flex flex-row justify-between px-3">
+            <TouchableOpacity
+              className=" border px-6 py-2  border-transparent bg-green-600 rounded-lg"
+              onPress={handleEditSave}
+            >
+              <Text className=" font-rubik-medium text-white">Save</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              className=" border px-6 py-2  border-transparent bg-red-500 rounded-lg"
+              onPress={handleEditCancel}
+            >
+              <Text className=" font-rubik-medium text-white">Cancel</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       )}
     </View>
