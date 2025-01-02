@@ -12,86 +12,6 @@ const editIcon = require("@/assets/images/ExpenseCardIcons/edit.png");
 const deleteIcon = require("@/assets/images/ExpenseCardIcons/delete.png");
 
 const ExpenseDisplay = () => {
-  const [expenses, setExpenses] = useState([
-    {
-      id: 0,
-      category: "Food",
-      amount: 150,
-      date: "2024-12-30",
-      description: "Hi, this is Nesharo",
-    },
-    {
-      id: 2,
-      category: "Travel",
-      amount: 500,
-      date: "2024-12-28",
-      description: "Hi, this is Nesharo",
-    },
-    {
-      id: 3,
-      category: "Shopping",
-      amount: 200,
-      date: "2024-12-25",
-      description:
-        "Hi, this is Nesharo, hello, how are youshflsh, farith suresh ganesh raja diljaz abhimanyu, Hi, this is Nesharo, hello, how are youshflsh, Hi, this is Nesharo",
-    },
-    {
-      id: 5,
-      category: "Shopping",
-      amount: 200,
-      date: "2024-12-25",
-      description:
-        "Hi, this is Nesharo, hello, how are youshflsh, farith suresh ganesh raja diljaz abhimanyu, Hi, this is Nesharo, hello, how are youshflsh, Hi, this is Nesharo",
-    },
-    {
-      id: 4,
-      category: "Shopping",
-      amount: 200,
-      date: "2024-12-25",
-      description:
-        "Hi, this is Nesharo, hello, how are youshflsh, farith suresh ganesh raja diljaz abhimanyu, Hi, this is Nesharo, hello, how are youshflsh, Hi, this is Nesharo",
-    },
-    {
-      id: 7,
-      category: "Shopping",
-      amount: 200,
-      date: "2024-12-25",
-      description:
-        "Hi, this is Nesharo, hello, how are youshflsh, farith suresh ganesh raja diljaz abhimanyu, Hi, this is Nesharo, hello, how are youshflsh, Hi, this is Nesharo",
-    },
-    {
-      id: 8,
-      category: "Shopping",
-      amount: 200,
-      date: "2024-12-25",
-      description:
-        "Hi, this is Nesharo, hello, how are youshflsh, farith suresh ganesh raja diljaz abhimanyu, Hi, this is Nesharo, hello, how are youshflsh, Hi, this is Nesharo",
-    },
-    {
-      id: 9,
-      category: "Shopping",
-      amount: 200,
-      date: "2024-12-25",
-      description:
-        "Hi, this is Nesharo, hello, how are youshflsh, farith suresh ganesh raja diljaz abhimanyu, Hi, this is Nesharo, hello, how are youshflsh, Hi, this is Nesharo",
-    },
-  ]);
-  const [showPopup, setShowPopup] = useState(false);
-  const [popupItem, setPopupItem] = useState<{
-    category: string;
-    amount: number;
-    date: string;
-    id: number;
-    description: string;
-  } | null>(null);
-  const [editExpense, setEditExpense] = useState<{
-    category: string;
-    amount: number;
-    date: string;
-    id: number;
-    description: string;
-  } | null>(null);
-
   type Expense = {
     id: number;
     category: string;
@@ -99,6 +19,39 @@ const ExpenseDisplay = () => {
     date: string;
     description: string;
   };
+  const [expenses, setExpenses] = useState<Expense[]>([
+    {
+      id: 0,
+      category: "Food",
+      amount: 150,
+      date: "20-12-2024",
+      description: "Hi, this is Nesharo",
+    },
+    {
+      id: 2,
+      category: "Travel",
+      amount: 500,
+      date: "05-12-2024",
+      description: "Hi, this is Nesharo",
+    },
+    {
+      id: 3,
+      category: "Shopping",
+      amount: 200,
+      date: "13-10-2024",
+      description:
+        "Hi, this is Nesharo, hello, how are youshflsh, farith suresh ganesh raja diljaz abhimanyu, Hi, this is Nesharo, hello, how are youshflsh, Hi, this is Nesharo",
+    },
+  ]);
+  const [showPopup, setShowPopup] = useState(false);
+  const [popupItem, setPopupItem] = useState<Expense | null>(null);
+  const [editExpense, setEditExpense] = useState<{
+    category: string;
+    amount: number;
+    date: string;
+    id: number;
+    description: string;
+  } | null>(null);
 
   const handlePopupOpen = (item: Expense) => {
     setShowPopup(true);
@@ -142,6 +95,10 @@ const ExpenseDisplay = () => {
     setEditExpense(null);
   };
 
+  const handleDelete = (id: number) => {
+    setExpenses((prev) => prev.filter((expense) => expense.id !== id));
+  };
+
   const renderExpenseCard = ({ item }: { item: Expense }) => {
     // let date = item.date;
     // item.date = date.split("-").reverse().join("-");
@@ -175,7 +132,10 @@ const ExpenseDisplay = () => {
           >
             <Image source={editIcon} className=" size-6" />
           </TouchableOpacity>
-          <TouchableOpacity className="border border-white px-3 py-1 rounded-lg bg-red-500">
+          <TouchableOpacity
+            className="border border-white px-3 py-1 rounded-lg bg-red-500"
+            onPress={() => handleDelete(item.id)}
+          >
             <Image source={deleteIcon} className=" size-6" />
           </TouchableOpacity>
         </View>
@@ -185,12 +145,26 @@ const ExpenseDisplay = () => {
 
   return (
     <View className=" px-6 mt-3">
-      <FlatList
-        showsVerticalScrollIndicator={false}
-        data={expenses}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={renderExpenseCard}
-      />
+      {expenses.length > 0 ? (
+        <View>
+          <Text className=" text-center font-rubik-bold text-2xl tracking-wide mb-3">
+            YOUR EXPENSES
+          </Text>
+          <FlatList
+            showsVerticalScrollIndicator={false}
+            data={expenses}
+            keyExtractor={(item) => item.id.toString()}
+            renderItem={renderExpenseCard}
+          />
+        </View>
+      ) : (
+        <View className=" h-full flex justify-center ">
+          <Text className=" font-rubik-bold tracking-wider text-2xl leading-9 text-center text-blue-600">
+            Add the Expense by {"\n"} Clicking the{" "}
+            <Text className=" text-4xl text-indigo-500">+</Text> icon
+          </Text>
+        </View>
+      )}
       {/* popup card */}
       {showPopup && (
         <View className=" absolute top-56 bottom-56 left-20 bg-white h-80 w-9/12 px-5 py-8 shadow-inherit shadow-lg flex flex-col justify-between rounded-2xl">
