@@ -7,6 +7,7 @@ import {
   Image,
   TextInput,
   ScrollView,
+  SectionList,
 } from "react-native";
 
 const editIcon = require("@/assets/images/ExpenseCardIcons/edit.png");
@@ -134,6 +135,18 @@ const ExpenseDisplay = () => {
     categorizeExpenses();
   }, [expenses]);
 
+  const sections = [
+    { title: "Today", data: todayExpenses },
+    { title: "This Month", data: thisMonthExpenses },
+    { title: "Past Expenses", data: pastExpenses },
+  ].filter((section) => section.data.length > 0);
+
+  const renderSectionHeader = ({ section: { title } }: any) => (
+    <Text className=" pl-5 font-rubik-semibold text-2xl text-violet-900 mb-2">
+      {title}
+    </Text>
+  );
+
   const [editExpense, setEditExpense] = useState<{
     category: string;
     amount: number;
@@ -235,55 +248,20 @@ const ExpenseDisplay = () => {
   return (
     <View className=" px-6 mt-3">
       {expenses.length > 0 ? (
-        <ScrollView showsVerticalScrollIndicator={false}>
-          <Text className=" text-center font-rubik-bold text-3xl text-blue-700">
-            Your Expenses
-          </Text>
-          {todayExpenses.length > 0 && (
-            <View className=" mt-8">
-              <Text className=" pl-6 font-rubik-bold text-2xl tracking-wide mb-3 text-violet-900">
-                Today
-              </Text>
-              <FlatList
-                showsVerticalScrollIndicator={false}
-                data={todayExpenses}
-                keyExtractor={(item) => item.id.toString()}
-                renderItem={renderExpenseCard}
-              />
-            </View>
-          )}
-          {thisMonthExpenses.length > 0 && (
-            <View className=" mt-5">
-              <Text className=" pl-6 font-rubik-bold text-2xl tracking-wide mb-3 text-violet-900">
-                This Month
-              </Text>
-              <FlatList
-                showsVerticalScrollIndicator={false}
-                data={thisMonthExpenses}
-                keyExtractor={(item) => item.id.toString()}
-                renderItem={renderExpenseCard}
-              />
-            </View>
-          )}
-          {pastExpenses.length > 0 && (
-            <View className=" mt-5">
-              <Text className=" pl-6 font-rubik-bold text-2xl tracking-wide mb-3 text-violet-900">
-                Past Expenses
-              </Text>
-              <FlatList
-                showsVerticalScrollIndicator={false}
-                data={pastExpenses}
-                keyExtractor={(item) => item.id.toString()}
-                renderItem={renderExpenseCard}
-              />
-            </View>
-          )}
-        </ScrollView>
+        <SectionList
+          sections={sections}
+          keyExtractor={(item) => item.id.toString()}
+          renderSectionHeader={renderSectionHeader}
+          renderItem={renderExpenseCard}
+          contentContainerStyle={{ paddingBottom: 20 }}
+          stickySectionHeadersEnabled={false}
+          showsVerticalScrollIndicator={false}
+        />
       ) : (
-        <View className=" h-full flex justify-center ">
-          <Text className=" font-rubik-bold tracking-wider text-2xl leading-9 text-center text-blue-600">
+        <View className="h-full flex justify-center">
+          <Text className="font-rubik-bold tracking-wider text-2xl leading-9 text-center text-blue-600">
             Add the Expense by {"\n"} Clicking the{" "}
-            <Text className=" text-3xl text-indigo-500">+</Text> icon
+            <Text className="text-4xl text-indigo-500">+</Text> icon
           </Text>
         </View>
       )}
