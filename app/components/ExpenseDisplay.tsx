@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Image,
   TextInput,
+  ScrollView,
 } from "react-native";
 
 const editIcon = require("@/assets/images/ExpenseCardIcons/edit.png");
@@ -19,19 +20,48 @@ const ExpenseDisplay = () => {
     date: string;
     description: string;
   };
+
   const [expenses, setExpenses] = useState<Expense[]>([
     {
       id: 0,
       category: "Food",
       amount: 150,
-      date: "20-12-2024",
+      date: "02-01-2025",
+      description: "Hi, this is Nesharo",
+    },
+    {
+      id: 10,
+      category: "Food",
+      amount: 150,
+      date: "02-01-2025",
+      description: "Hi, this is Nesharo",
+    },
+    {
+      id: 100,
+      category: "Food",
+      amount: 150,
+      date: "02-01-2025",
       description: "Hi, this is Nesharo",
     },
     {
       id: 2,
       category: "Travel",
       amount: 500,
-      date: "05-12-2024",
+      date: "01-01-2025",
+      description: "Hi, this is Nesharo",
+    },
+    {
+      id: 20,
+      category: "Travel",
+      amount: 500,
+      date: "01-01-2025",
+      description: "Hi, this is Nesharo",
+    },
+    {
+      id: 200,
+      category: "Travel",
+      amount: 500,
+      date: "01-01-2025",
       description: "Hi, this is Nesharo",
     },
     {
@@ -42,9 +72,68 @@ const ExpenseDisplay = () => {
       description:
         "Hi, this is Nesharo, hello, how are youshflsh, farith suresh ganesh raja diljaz abhimanyu, Hi, this is Nesharo, hello, how are youshflsh, Hi, this is Nesharo",
     },
+    {
+      id: 30,
+      category: "Shopping",
+      amount: 200,
+      date: "13-10-2024",
+      description:
+        "Hi, this is Nesharo, hello, how are youshflsh, farith suresh ganesh raja diljaz abhimanyu, Hi, this is Nesharo, hello, how are youshflsh, Hi, this is Nesharo",
+    },
+    {
+      id: 300,
+      category: "Shopping",
+      amount: 200,
+      date: "13-10-2024",
+      description:
+        "Hi, this is Nesharo, hello, how are youshflsh, farith suresh ganesh raja diljaz abhimanyu, Hi, this is Nesharo, hello, how are youshflsh, Hi, this is Nesharo",
+    },
   ]);
+
+  const [todayExpenses, setTodayExpenses] = useState<Expense[]>([]);
+  const [thisMonthExpenses, setThisMonthExpenses] = useState<Expense[]>([]);
+  const [pastExpenses, setPastExpenses] = useState<Expense[]>([]);
+
   const [showPopup, setShowPopup] = useState(false);
   const [popupItem, setPopupItem] = useState<Expense | null>(null);
+
+  const categorizeExpenses = () => {
+    const today = new Date();
+    const todayExpenses: Expense[] = [];
+    const thisMonthExpenses: Expense[] = [];
+    const pastExpenses: Expense[] = [];
+
+    const parseDate = (dateString: string) => {
+      const [day, month, year] = dateString.split("-").map(Number);
+      return new Date(year, month - 1, day);
+    };
+
+    expenses.forEach((expense) => {
+      const expenseDate = parseDate(expense.date);
+      if (
+        expenseDate.getDate() === today.getDate() &&
+        expenseDate.getMonth() === today.getMonth() &&
+        expenseDate.getFullYear() === today.getFullYear()
+      ) {
+        todayExpenses.push(expense);
+      } else if (
+        expenseDate.getMonth() == today.getMonth() &&
+        expenseDate.getFullYear() === today.getFullYear()
+      ) {
+        thisMonthExpenses.push(expense);
+      } else {
+        pastExpenses.push(expense);
+      }
+      setTodayExpenses(todayExpenses);
+      setThisMonthExpenses(thisMonthExpenses);
+      setPastExpenses(pastExpenses);
+    });
+  };
+
+  useEffect(() => {
+    categorizeExpenses();
+  }, [expenses]);
+
   const [editExpense, setEditExpense] = useState<{
     category: string;
     amount: number;
@@ -103,10 +192,10 @@ const ExpenseDisplay = () => {
     // let date = item.date;
     // item.date = date.split("-").reverse().join("-");
     return (
-      <View className=" flex flex-row mt-5 border border-t-white border-l-white border-r-white border-b-gray-300 px-6 pb-4 items-center justify-between">
+      <View className=" flex flex-row px-6 pb-4 items-center justify-between">
         {/* Category,Amount,Date */}
         <View className=" flex flex-col">
-          <Text className=" font-rubik-bold text-2xl text-red-500 tracking-wide">
+          <Text className=" font-rubik-medium text-xl text-red-500">
             {item.category}
           </Text>
           <Text className=" text-blue-500 text-lg font-rubik-semibold">
@@ -146,22 +235,55 @@ const ExpenseDisplay = () => {
   return (
     <View className=" px-6 mt-3">
       {expenses.length > 0 ? (
-        <View>
-          <Text className=" text-center font-rubik-bold text-2xl tracking-wide mb-3">
-            YOUR EXPENSES
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <Text className=" text-center font-rubik-bold text-3xl text-blue-700">
+            Your Expenses
           </Text>
-          <FlatList
-            showsVerticalScrollIndicator={false}
-            data={expenses}
-            keyExtractor={(item) => item.id.toString()}
-            renderItem={renderExpenseCard}
-          />
-        </View>
+          {todayExpenses.length > 0 && (
+            <View className=" mt-8">
+              <Text className=" pl-6 font-rubik-bold text-2xl tracking-wide mb-3 text-violet-900">
+                Today
+              </Text>
+              <FlatList
+                showsVerticalScrollIndicator={false}
+                data={todayExpenses}
+                keyExtractor={(item) => item.id.toString()}
+                renderItem={renderExpenseCard}
+              />
+            </View>
+          )}
+          {thisMonthExpenses.length > 0 && (
+            <View className=" mt-5">
+              <Text className=" pl-6 font-rubik-bold text-2xl tracking-wide mb-3 text-violet-900">
+                This Month
+              </Text>
+              <FlatList
+                showsVerticalScrollIndicator={false}
+                data={thisMonthExpenses}
+                keyExtractor={(item) => item.id.toString()}
+                renderItem={renderExpenseCard}
+              />
+            </View>
+          )}
+          {pastExpenses.length > 0 && (
+            <View className=" mt-5">
+              <Text className=" pl-6 font-rubik-bold text-2xl tracking-wide mb-3 text-violet-900">
+                Past Expenses
+              </Text>
+              <FlatList
+                showsVerticalScrollIndicator={false}
+                data={pastExpenses}
+                keyExtractor={(item) => item.id.toString()}
+                renderItem={renderExpenseCard}
+              />
+            </View>
+          )}
+        </ScrollView>
       ) : (
         <View className=" h-full flex justify-center ">
           <Text className=" font-rubik-bold tracking-wider text-2xl leading-9 text-center text-blue-600">
             Add the Expense by {"\n"} Clicking the{" "}
-            <Text className=" text-4xl text-indigo-500">+</Text> icon
+            <Text className=" text-3xl text-indigo-500">+</Text> icon
           </Text>
         </View>
       )}
