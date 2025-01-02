@@ -2,95 +2,30 @@ import { useEffect, useState } from "react";
 import {
   View,
   Text,
-  FlatList,
   TouchableOpacity,
   Image,
   TextInput,
-  ScrollView,
   SectionList,
 } from "react-native";
 
 const editIcon = require("@/assets/images/ExpenseCardIcons/edit.png");
 const deleteIcon = require("@/assets/images/ExpenseCardIcons/delete.png");
 
-const ExpenseDisplay = () => {
-  type Expense = {
-    id: number;
-    category: string;
-    amount: number;
-    date: string;
-    description: string;
-  };
-
-  const [expenses, setExpenses] = useState<Expense[]>([
-    {
-      id: 0,
-      category: "Food",
-      amount: 150,
-      date: "02-01-2025",
-      description: "Hi, this is Nesharo",
-    },
-    {
-      id: 10,
-      category: "Food",
-      amount: 150,
-      date: "02-01-2025",
-      description: "Hi, this is Nesharo",
-    },
-    {
-      id: 100,
-      category: "Food",
-      amount: 150,
-      date: "02-01-2025",
-      description: "Hi, this is Nesharo",
-    },
-    {
-      id: 2,
-      category: "Travel",
-      amount: 500,
-      date: "01-01-2025",
-      description: "Hi, this is Nesharo",
-    },
-    {
-      id: 20,
-      category: "Travel",
-      amount: 500,
-      date: "01-01-2025",
-      description: "Hi, this is Nesharo",
-    },
-    {
-      id: 200,
-      category: "Travel",
-      amount: 500,
-      date: "01-01-2025",
-      description: "Hi, this is Nesharo",
-    },
-    {
-      id: 3,
-      category: "Shopping",
-      amount: 200,
-      date: "13-10-2024",
-      description:
-        "Hi, this is Nesharo, hello, how are youshflsh, farith suresh ganesh raja diljaz abhimanyu, Hi, this is Nesharo, hello, how are youshflsh, Hi, this is Nesharo",
-    },
-    {
-      id: 30,
-      category: "Shopping",
-      amount: 200,
-      date: "13-10-2024",
-      description:
-        "Hi, this is Nesharo, hello, how are youshflsh, farith suresh ganesh raja diljaz abhimanyu, Hi, this is Nesharo, hello, how are youshflsh, Hi, this is Nesharo",
-    },
-    {
-      id: 300,
-      category: "Shopping",
-      amount: 200,
-      date: "13-10-2024",
-      description:
-        "Hi, this is Nesharo, hello, how are youshflsh, farith suresh ganesh raja diljaz abhimanyu, Hi, this is Nesharo, hello, how are youshflsh, Hi, this is Nesharo",
-    },
-  ]);
-
+type Expense = {
+  id: number;
+  category: string;
+  amount: number;
+  date: string;
+  description: string;
+};
+type ExpenseDisplayProps = {
+  expenses: Expense[];
+  setExpenses: React.Dispatch<React.SetStateAction<Expense[]>>;
+};
+const ExpenseDisplay: React.FC<ExpenseDisplayProps> = ({
+  expenses,
+  setExpenses,
+}) => {
   const [todayExpenses, setTodayExpenses] = useState<Expense[]>([]);
   const [thisMonthExpenses, setThisMonthExpenses] = useState<Expense[]>([]);
   const [pastExpenses, setPastExpenses] = useState<Expense[]>([]);
@@ -260,14 +195,14 @@ const ExpenseDisplay = () => {
       ) : (
         <View className="h-full flex justify-center">
           <Text className="font-rubik-bold tracking-wider text-2xl leading-9 text-center text-blue-600">
-            Add the Expense by {"\n"} Clicking the{" "}
+            Add your First Expense {"\n"} by Clicking the{" "}
             <Text className="text-4xl text-indigo-500">+</Text> icon
           </Text>
         </View>
       )}
       {/* popup card */}
       {showPopup && (
-        <View className=" absolute top-56 bottom-56 left-20 bg-white h-80 w-9/12 px-5 py-8 shadow-inherit shadow-lg flex flex-col justify-between rounded-2xl">
+        <View className=" absolute top-56 bottom-56 left-20 bg-white h-80 w-9/12 px-5 py-8 shadow-inherit shadow-lg flex flex-col justify-between rounded-2xl z-20">
           <View className=" flex flex-col gap-3">
             <Text className=" font-rubik-bold text-pink-600">
               {popupItem?.date}
@@ -293,7 +228,7 @@ const ExpenseDisplay = () => {
       )}
       {/* edit form */}
       {editExpense && (
-        <View className=" absolute top-28 w-11/12 left-10 bg-white h-[35rem] flex flex-col px-10 gap-10 py-8 shadow-black shadow-lg rounded-2xl">
+        <View className=" absolute top-28 w-11/12 left-10 bg-white h-[35rem] flex flex-col px-10 gap-10 py-8 shadow-black shadow-lg rounded-2xl z-20">
           <Text className=" text-center font-rubik-bold text-2xl tracking-wide">
             Edit Expense{" "}
           </Text>

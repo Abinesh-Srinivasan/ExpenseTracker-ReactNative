@@ -53,8 +53,8 @@ export default function Index() {
         },
       })}
     >
-      <Tab.Screen name="Dashboard" component={DashboardTab} />
       <Tab.Screen name="Expenses" component={ExpensesTab} />
+      <Tab.Screen name="Dashboard" component={DashboardTab} />
       <Tab.Screen name="Developer" component={DeveloperTab} />
     </Tab.Navigator>
   );
