@@ -60,9 +60,9 @@ const ExpenseDisplay: React.FC<ExpenseDisplayProps> = ({
       } else {
         pastExpenses.push(expense);
       }
-      setTodayExpenses(todayExpenses);
-      setThisMonthExpenses(thisMonthExpenses);
-      setPastExpenses(pastExpenses);
+      setTodayExpenses([...todayExpenses].reverse());
+      setThisMonthExpenses([...thisMonthExpenses].reverse());
+      setPastExpenses([...pastExpenses].reverse());
     });
   };
 
@@ -77,7 +77,7 @@ const ExpenseDisplay: React.FC<ExpenseDisplayProps> = ({
   ].filter((section) => section.data.length > 0);
 
   const renderSectionHeader = ({ section: { title } }: any) => (
-    <Text className=" pl-5 font-rubik-semibold text-2xl text-violet-900 mb-2">
+    <Text className=" pl-2 font-rubik-semibold text-2xl text-violet-900 mb-2">
       {title}
     </Text>
   );
@@ -196,7 +196,7 @@ const ExpenseDisplay: React.FC<ExpenseDisplayProps> = ({
         <View className="h-full flex justify-center">
           <Text className="font-rubik-bold tracking-wider text-2xl leading-9 text-center text-blue-600">
             Add your First Expense {"\n"} by Clicking the{" "}
-            <Text className="text-4xl text-indigo-500">+</Text> icon
+            <Text className="text-3xl text-indigo-500">+</Text> icon
           </Text>
         </View>
       )}
