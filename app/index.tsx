@@ -26,14 +26,14 @@ export default function Index() {
       id: 0,
       category: "Food",
       amount: 150,
-      date: "02-01-2025",
+      date: "03-01-2025",
       description: "Hi, this is Nesharo",
     },
     {
       id: 10,
       category: "Food",
       amount: 150,
-      date: "02-01-2025",
+      date: "03-01-2025",
       description: "Hi, this is Nesharo",
     },
     {

@@ -50,6 +50,11 @@ const ExpenseAdd: React.FC<ExpenseAddProps> = ({ onAddExpense }) => {
       return;
     }
 
+    if (isNaN(newExpense.amount)) {
+      Alert.alert("Msg from Nesharo:\nPlease enter a valid amount");
+      return;
+    }
+
     // pass the newExpense to the parent component ExpensesTab.tsx
     onAddExpense(newExpense);
 

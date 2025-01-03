@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, Alert } from "react-native";
 const BudgetDashboard = ({
   dashboardContent,
   budgetLimitMonth,
@@ -22,6 +22,10 @@ const BudgetDashboard = ({
   const [budgetLimitEntering, setBudgetLimitEntering] = useState("");
 
   const handleBudgetSubmit = (field: string) => {
+    const parsedValue = parseFloat(budgetLimitEntering);
+    if (isNaN(parsedValue) || parsedValue <= 0) {
+      Alert.alert("Msg from Nesharo\nPlease Enter a Valid Budget Limit");
+    }
     if (field === "This Month") {
       setBudgetLimitMonth(parseFloat(budgetLimitEntering));
     } else {
@@ -39,6 +43,7 @@ const BudgetDashboard = ({
         <TextInput
           value={budgetLimitEntering}
           onChangeText={(text) => setBudgetLimitEntering(text)}
+          maxLength={10}
           keyboardType="numeric"
           placeholder="Can't Edit later"
           className=" border rounded-lg border-gray-300 w-40 pl-3 font-rubik-regular"
@@ -108,6 +113,10 @@ const BudgetDashboard = ({
       </View>
     );
   }
-  return null;
+  return (
+    <Text className=" text-2xl font-rubik-medium tracking-wider text-orange-500 text-center mt-8">
+      Expenses: {pastExpensesTotal.toFixed(2)}
+    </Text>
+  );
 };
 export default BudgetDashboard;

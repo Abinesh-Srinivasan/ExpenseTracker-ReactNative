@@ -6,6 +6,7 @@ import {
   Image,
   TextInput,
   SectionList,
+  Alert,
 } from "react-native";
 
 const editIcon = require("@/assets/images/ExpenseCardIcons/edit.png");
@@ -110,6 +111,9 @@ const ExpenseDisplay: React.FC<ExpenseDisplayProps> = ({
         setEditExpense((prev) => (prev ? { ...prev, [field]: 0 } : null));
       } else {
         const numericValue = parseFloat(value);
+        if (isNaN(numericValue)) {
+          return;
+        }
         setEditExpense((prev) =>
           prev ? { ...prev, [field]: numericValue } : null
         );
@@ -119,7 +123,11 @@ const ExpenseDisplay: React.FC<ExpenseDisplayProps> = ({
     }
   };
 
-  const handleEditSave = () => {
+  const handleEditSave = (editExpenseAmount: number) => {
+    if (isNaN(editExpenseAmount) || editExpenseAmount <= 0) {
+      Alert.alert("Msg from Nesharo\nPlease Enter a Valid Amount");
+      return;
+    }
     setExpenses((prev) =>
       prev.map((expense) =>
         expense.id === editExpense?.id ? editExpense : expense
@@ -269,7 +277,7 @@ const ExpenseDisplay: React.FC<ExpenseDisplayProps> = ({
           <View className=" flex flex-row justify-between px-3">
             <TouchableOpacity
               className=" border px-6 py-2  border-transparent bg-green-600 rounded-lg"
-              onPress={handleEditSave}
+              onPress={() => handleEditSave(editExpense.amount)}
             >
               <Text className=" font-rubik-medium text-white">Save</Text>
             </TouchableOpacity>
