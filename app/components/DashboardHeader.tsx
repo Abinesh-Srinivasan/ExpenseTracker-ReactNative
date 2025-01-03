@@ -5,7 +5,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 const DashboardHeader = ({ dashboardContent, setDashboardContent }: {
   dashboardContent:string,setDashboardContent:(value:string)=>void
 }) => {
-  const [dropdownVisible, setDropdownVisible] = useState(true);
+  const [dropdownVisible, setDropdownVisible] = useState(false);
   const items = [
     { label: "This Month", value: "This Month" },
     { label: "Today", value: "Today" },

@@ -4,7 +4,7 @@ import { Image, Text, View } from "react-native";
 import DashboardTab from "./tabs/DashboardTab";
 import ExpensesTab from "./tabs/ExpensesTab";
 import DeveloperTab from "./tabs/DeveloperTab";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const DashboardIcon = require("@/assets/images/TabIcons/dashboard.png");
 const ExpensesIcon = require("@/assets/images/TabIcons/expenses.png");
@@ -12,9 +12,7 @@ const DeveloperIcon = require("@/assets/images/TabIcons/user.png");
 
 const Tab = createBottomTabNavigator();
 
-
 export default function Index() {
-
   type Expense = {
     id: number;
     category: string;
@@ -92,6 +90,47 @@ export default function Index() {
     },
   ]);
 
+  const [todayExpenses, setTodayExpenses] = useState<Expense[]>([]);
+  const [thisMonthExpenses, setThisMonthExpenses] = useState<Expense[]>([]);
+  const [pastExpenses, setPastExpenses] = useState<Expense[]>([]);
+
+  const categorizeExpenses = () => {
+    const today = new Date();
+    const todayExpenses: Expense[] = [];
+    const thisMonthExpenses: Expense[] = [];
+    const pastExpenses: Expense[] = [];
+
+    const parseDate = (dateString: string) => {
+      const [day, month, year] = dateString.split("-").map(Number);
+      return new Date(year, month - 1, day);
+    };
+
+    expenses.forEach((expense) => {
+      const expenseDate = parseDate(expense.date);
+      if (
+        expenseDate.getDate() === today.getDate() &&
+        expenseDate.getMonth() === today.getMonth() &&
+        expenseDate.getFullYear() === today.getFullYear()
+      ) {
+        todayExpenses.push(expense);
+      } else if (
+        expenseDate.getMonth() == today.getMonth() &&
+        expenseDate.getFullYear() === today.getFullYear()
+      ) {
+        thisMonthExpenses.push(expense);
+      } else {
+        pastExpenses.push(expense);
+      }
+      setTodayExpenses([...todayExpenses].reverse());
+      setThisMonthExpenses([...thisMonthExpenses].reverse());
+      setPastExpenses([...pastExpenses].reverse());
+    });
+  };
+
+  useEffect(() => {
+    categorizeExpenses();
+  }, [expenses]);
+
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -133,12 +172,18 @@ export default function Index() {
         },
       })}
     >
-      <Tab.Screen name="Expenses">{
-        ()=><ExpensesTab expenses={expenses} setExpenses={setExpenses} />
-      }</Tab.Screen>
-      <Tab.Screen name="Dashboard">{
-        ()=><DashboardTab expenses={expenses} />
-      }</Tab.Screen>
+      <Tab.Screen name="Expenses">
+        {() => <ExpensesTab expenses={expenses} setExpenses={setExpenses} />}
+      </Tab.Screen>
+      <Tab.Screen name="Dashboard">
+        {() => (
+          <DashboardTab
+            todayExpenses={todayExpenses}
+            thisMonthExpenses={thisMonthExpenses}
+            pastExpenses={pastExpenses}
+          />
+        )}
+      </Tab.Screen>
       <Tab.Screen name="Developer" component={DeveloperTab} />
     </Tab.Navigator>
   );
