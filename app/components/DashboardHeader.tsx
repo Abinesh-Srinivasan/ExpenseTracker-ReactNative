@@ -18,7 +18,7 @@ const DashboardHeader = ({ dashboardContent, setDashboardContent }: {
   };
   return (
     <View className=" mt-10 pl-5 pr-5 flex flex-row w-full justify-between items-center">
-      <Text className=" w-1/2 font-rubik-bold text-4xl text-violet-600">
+      <Text className=" w-1/2 font-rubik-extrabold text-4xl text-violet-600">
         Dashboard
       </Text>
       <View className=" w-1/2 flex items-end">
@@ -38,7 +38,7 @@ const DashboardHeader = ({ dashboardContent, setDashboardContent }: {
         </TouchableOpacity>
         {/* dropdown menu */}
         {dropdownVisible && (
-          <View className=" mt-3 absolute top-8 right-6">
+          <View className=" mt-3 absolute top-8 right-6 z-10 bg-white p-4">
             <FlatList
               data={items}
               keyExtractor={(item) => item.value}
