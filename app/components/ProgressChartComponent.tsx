@@ -6,7 +6,16 @@ interface ProgressChartComponentProps {
   data: { name: string; amount: number; color: string }[];
 }
 
-const ProgressChartComponent= ({ data }: ProgressChartComponentProps) => {
+const ProgressChartComponent = ({ data }: ProgressChartComponentProps) => {
+  
+  if (data.length === 0) {
+    return (
+      <View className="mx-5 mt-14 mb-10">
+        <Text className="text-3xl font-rubik-bold text-fuchsia-500 mb-8">Progress Chart</Text>
+        <Text className="text-xl font-rubik-medium text-slate-700 text-center mt-20">You made no expenses today</Text>
+      </View>
+    );
+  }
   // Calculate total expenses
   const totalAmount = data.reduce((sum, item) => sum + item.amount, 0);
 
