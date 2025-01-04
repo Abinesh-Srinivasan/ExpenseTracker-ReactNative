@@ -4,6 +4,7 @@ import DashboardHeader from "../components/DashboardHeader";
 import BudgetDashboard from "../components/BudgetDashboard";
 import BarchartComponent from "../components/BarchartComponent";
 import ProgressChartComponent from "../components/ProgressChartComponent";
+import YearlyExpenses from "../components/YearlyExpenses";
 import { useEffect, useState } from "react";
 
 type Expense = {
@@ -131,6 +132,7 @@ const DashboardTab = ({
           <BarchartComponent data={dailyExpenses} />
         )}
         {dashboardContent === "Today" && <ProgressChartComponent data={categoryExpenses} />}
+        {dashboardContent === "Past Expenses" && <YearlyExpenses/>}
       </ScrollView>
     </SafeAreaView>
   );
