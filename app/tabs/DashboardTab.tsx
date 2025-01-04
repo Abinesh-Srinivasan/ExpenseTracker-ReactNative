@@ -3,6 +3,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import DashboardHeader from "../components/DashboardHeader";
 import BudgetDashboard from "../components/BudgetDashboard";
 import BarchartComponent from "../components/BarchartComponent";
+import ProgressChartComponent from "../components/ProgressChartComponent";
 import { useEffect, useState } from "react";
 
 type Expense = {
@@ -31,8 +32,12 @@ const DashboardTab = ({
   const [todayExpensesTotal, setTodayExpensesTotal] = useState(0);
   const [thisMonthExpensesTotal, setThisMonthExpensesTotal] = useState(0);
   const [pastExpensesTotal, setPastExpensesTotal] = useState(0);
-  // hooks for barchart component
+  // hook for barchart component
   const [dailyExpenses, setDailyExpenses] = useState<number[]>([]);
+  // hook for piechart component
+  const [categoryExpenses, setCategoryExpenses] = useState<
+    { name: string; amount: number; color: string }[]
+  >([]);
 
   useEffect(() => {
     const todayExpensesTotal = todayExpenses.reduce(
@@ -73,6 +78,35 @@ const DashboardTab = ({
     setDailyExpenses(dailyExpenses);
   }, [thisMonthExpenses]);
 
+  // functions for PieChart component
+  useEffect(() => {
+    const categoryTotal: Record<string, number> = {};
+    todayExpenses.forEach((expense) => {
+      if (categoryTotal[expense.category]) {
+        categoryTotal[expense.category] += expense.amount;
+      } else {
+        categoryTotal[expense.category] = expense.amount;
+      }
+    });
+    const colors = [
+      "#E53935", // Rich Red
+      "#1E88E5", // Deep Blue
+      "#FB8C00", // Burnt Orange
+      "#43A047", // Forest Green
+      "#8E24AA", // Vibrant Purple
+      "#FFB300", // Amber 
+    ];
+
+
+    const processedCategoryExpenses = Object.keys(categoryTotal).map((category,index) => ({
+      name: category,
+      amount: categoryTotal[category],
+      color:colors[index%colors.length]
+        
+    }))
+    setCategoryExpenses(processedCategoryExpenses)
+  }, [todayExpenses]);
+
   return (
     <SafeAreaView className=" h-full bg-white">
       <DashboardHeader
@@ -80,7 +114,7 @@ const DashboardTab = ({
         setDashboardContent={setDashboardContent}
       />
       <ScrollView>
-        <Text className=" ml-5 mt-8 font-rubik-bold text-3xl text-blue-600 tracking-wide ">
+        <Text className=" ml-5 mt-10 font-rubik-bold text-3xl text-blue-600 tracking-wide ">
           Expense Computation
         </Text>
         <BudgetDashboard
@@ -96,6 +130,7 @@ const DashboardTab = ({
         {dashboardContent === "This Month" && (
           <BarchartComponent data={dailyExpenses} />
         )}
+        {dashboardContent === "Today" && <ProgressChartComponent data={categoryExpenses} />}
       </ScrollView>
     </SafeAreaView>
   );
