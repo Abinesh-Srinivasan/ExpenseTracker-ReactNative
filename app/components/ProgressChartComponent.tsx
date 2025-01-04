@@ -31,7 +31,7 @@ const ProgressChartComponent= ({ data }: ProgressChartComponentProps) => {
             <Progress.Bar
               progress={progress} // between 0 and 1
               width={null} 
-              height={8} 
+              height={10} 
               color={item.color} 
               unfilledColor="#e0e0e0" 
               borderWidth={0} 

@@ -95,17 +95,17 @@ const DashboardTab = ({
       "#FB8C00", // Burnt Orange
       "#43A047", // Forest Green
       "#8E24AA", // Vibrant Purple
-      "#FFB300", // Amber 
+      "#FFB300", // Amber
     ];
 
-
-    const processedCategoryExpenses = Object.keys(categoryTotal).map((category,index) => ({
-      name: category,
-      amount: categoryTotal[category],
-      color:colors[index%colors.length]
-        
-    }))
-    setCategoryExpenses(processedCategoryExpenses)
+    const processedCategoryExpenses = Object.keys(categoryTotal).map(
+      (category, index) => ({
+        name: category,
+        amount: categoryTotal[category],
+        color: colors[index % colors.length],
+      })
+    );
+    setCategoryExpenses(processedCategoryExpenses);
   }, [todayExpenses]);
 
   return (
@@ -131,8 +131,12 @@ const DashboardTab = ({
         {dashboardContent === "This Month" && (
           <BarchartComponent data={dailyExpenses} />
         )}
-        {dashboardContent === "Today" && <ProgressChartComponent data={categoryExpenses} />}
-        {dashboardContent === "Past Expenses" && <YearlyExpenses/>}
+        {dashboardContent === "Today" && (
+          <ProgressChartComponent data={categoryExpenses} />
+        )}
+        {dashboardContent === "Past Expenses" && (
+          <YearlyExpenses setDashboardContent={setDashboardContent} />
+        )}
       </ScrollView>
     </SafeAreaView>
   );

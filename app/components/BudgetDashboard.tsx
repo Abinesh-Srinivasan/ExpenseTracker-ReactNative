@@ -119,7 +119,7 @@ const BudgetDashboard = ({
         Past Expenses: ₹.{pastExpensesTotal.toFixed(2)}
       </Text>
       <Text className=" font-rubik-regular text-slate-800 text-center">
-        Clear all the Expenses per Year through Developer Tab to reset the Past
+        Clear all the Data atleast once per Year through Developer Tab to reset the Past
         Expenses{" "}
       </Text>
     </View>

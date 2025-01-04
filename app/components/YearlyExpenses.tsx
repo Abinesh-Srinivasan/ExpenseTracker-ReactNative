@@ -1,6 +1,10 @@
 import { useState } from "react";
 import { View, Text, TextInput, TouchableOpacity } from "react-native";
-const YearlyExpenses = () => {
+const YearlyExpenses = ({
+  setDashboardContent,
+}: {
+  setDashboardContent: (value: string) => void;
+}) => {
   const months = [
     "January",
     "February",
@@ -18,12 +22,20 @@ const YearlyExpenses = () => {
   const [monthlyExpenses, setMonthlyExpenses] = useState(
     new Array(12).fill("")
   );
-  const [totalYearlyExpenses, setTotalYearlyExpenses] = useState("500000");
+  const [totalYearlyExpenses, setTotalYearlyExpenses] = useState("0");
 
   const handleInputChange = (index: number, value: string) => {
     const newMonthlyExpenses = [...monthlyExpenses];
     newMonthlyExpenses[index] = value;
     setMonthlyExpenses(newMonthlyExpenses);
+  };
+
+  const calculateTotal = () => {
+    const total = monthlyExpenses.reduce(
+      (sum, expense) => sum + (parseFloat(expense) || 0),
+      0
+    );
+    setTotalYearlyExpenses(total);
   };
 
   return (
@@ -37,12 +49,17 @@ const YearlyExpenses = () => {
           Purposes
         </Text>
         <Text className=" text-center font-rubik-medium px-6 leading-6 text-slate-800">
-          Data can't Auto fetch, User should Fill and Calculate the Total
+          Data can be retained once the user fills it out
         </Text>
         <Text className=" text-center font-rubik-medium px-6 leading-6 text-slate-800">
           You can view the Total Monthly Expenses in the{" "}
-          <Text className=" text-fuchsia-500">This Month</Text> section at month
-          end
+          <Text
+            className=" text-fuchsia-500"
+            onPress={() => setDashboardContent("This Month")}
+          >
+            This Month
+          </Text>{" "}
+          section at month end
         </Text>
       </View>
       {/* yearly tracker */}
@@ -66,7 +83,7 @@ const YearlyExpenses = () => {
         ))}
       </View>
       <View className=" mt-10 flex flex-col justify-center items-center w-full">
-        <View className=" flex flex-row gap-5 items-center">
+        <View className=" mx-20 flex flex-row gap-5 items-center">
           <Text className="font-rubik-medium tracking-wide text-3xl">
             Total:
           </Text>
@@ -74,11 +91,24 @@ const YearlyExpenses = () => {
             ₹.{totalYearlyExpenses}
           </Text>
         </View>
-        <TouchableOpacity className=" mt-5">
-          <Text className="font-rubik-semibold text-xl text-white bg-red-500 px-5 py-2 rounded-lg">
-            Reset
-          </Text>
-        </TouchableOpacity>
+        <View className=" flex flex-row gap-10 items-center">
+          <TouchableOpacity className=" mt-5" onPress={calculateTotal}>
+            <Text className="font-rubik-semibold text-xl text-white bg-green-500 px-6 py-3 rounded-lg">
+              Calculate
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            className=" mt-5"
+            onPress={() => {
+              setMonthlyExpenses(new Array(12).fill(""));
+              setTotalYearlyExpenses("0");
+            }}
+          >
+            <Text className="font-rubik-semibold text-xl text-white bg-red-500 px-6 py-3 rounded-lg">
+              Reset
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
