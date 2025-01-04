@@ -123,9 +123,17 @@ const ExpenseDisplay: React.FC<ExpenseDisplayProps> = ({
     }
   };
 
-  const handleEditSave = (editExpenseAmount: number) => {
-    if (isNaN(editExpenseAmount) || editExpenseAmount <= 0) {
+  const handleEditSave = (editExpense: Expense) => {
+    if (isNaN(editExpense.amount) || editExpense.amount <= 0) {
       Alert.alert("Msg from Nesharo\nPlease Enter a Valid Amount");
+      return;
+    }
+    // check if the date is in the future
+    const [day, month, year] = editExpense.date.split("-").map(Number);
+    const enteredDate = new Date(year, month - 1, day);
+    const today = new Date();
+    if (enteredDate > today) {
+      Alert.alert("Msg from Nesharo\nFuture date is not allowed");
       return;
     }
     setExpenses((prev) =>
@@ -277,7 +285,7 @@ const ExpenseDisplay: React.FC<ExpenseDisplayProps> = ({
           <View className=" flex flex-row justify-between px-3">
             <TouchableOpacity
               className=" border px-6 py-2  border-transparent bg-green-600 rounded-lg"
-              onPress={() => handleEditSave(editExpense.amount)}
+              onPress={() => handleEditSave(editExpense)}
             >
               <Text className=" font-rubik-medium text-white">Save</Text>
             </TouchableOpacity>

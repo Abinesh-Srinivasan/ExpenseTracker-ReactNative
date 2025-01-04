@@ -55,6 +55,16 @@ const ExpenseAdd: React.FC<ExpenseAddProps> = ({ onAddExpense }) => {
       return;
     }
 
+    // check if the date is in the future
+    const [day, month, year] = newExpense.date.split("-").map(Number);
+    const enteredDate = new Date(year, month - 1, day);
+    const today = new Date();
+
+    if (enteredDate > today) {
+      Alert.alert("Msg from Nesharo:\nFuture date is not allowed");
+      return;
+    }
+
     // pass the newExpense to the parent component ExpensesTab.tsx
     onAddExpense(newExpense);
 
