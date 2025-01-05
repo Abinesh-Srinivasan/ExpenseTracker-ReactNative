@@ -1,8 +1,17 @@
-import { View, Text, Image, ScrollView, TouchableOpacity, Linking } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  ScrollView,
+  TouchableOpacity,
+  Linking,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as Animatable from "react-native-animatable";
 import { useEffect, useState } from "react";
+
 const Abinesh = require("@/assets/images/abinesh.jpeg");
+const Website = require("@/assets/images/SocialMediaIcons/website.png");
 const LinkedIn = require("@/assets/images/SocialMediaIcons/linkedin.png");
 const GitHub = require("@/assets/images/SocialMediaIcons/github.png");
 const Instagram = require("@/assets/images/SocialMediaIcons/instagram.png");
@@ -51,10 +60,21 @@ const DeveloperTab = () => {
             >
               {qualities[currentQuality]}
             </Animatable.Text>
+            <TouchableOpacity
+              onPress={() =>
+                Linking.openURL("https://abineshsrinivasan.netlify.app")
+              }
+              className=" flex flex-row items-center justify-center gap-1"
+            >
+              <Image source={Website} className=" size-6" />
+              <Text className=" font-rubik-medium text-xl">
+                Visit Nesharo's Website
+              </Text>
+            </TouchableOpacity>
           </View>
         </View>
         {/* quote */}
-        <View className=" mx-10 mt-3 items-center bg-sky-400 p-5 rounded-2xl">
+        <View className=" mx-10 mt-3 items-center bg-sky-400 px-5 py-6 rounded-2xl">
           <Text className="font-rubik-regular text-white tracking-wider text-center">
             You're not a real programmer until you've spent at least a day
             pulling your hair out over a bug that should have been easy to fix
@@ -146,6 +166,19 @@ const DeveloperTab = () => {
               </TouchableOpacity>
             </View>
           </View>
+        </View>
+        {/* delete and export data */}
+        <View className=" mt-10 flex flex-col gap-3 items-center">
+          <TouchableOpacity className=" border border-transparent bg-green-500 rounded-lg w-4/6 py-2">
+            <Text className=" font-rubik-semibold text-2xl tracking-wide text-center text-white">
+              Export All Expenses
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity className=" border border-transparent bg-red-500 rounded-lg w-4/6 py-2">
+            <Text className=" font-rubik-semibold text-2xl tracking-wide text-center text-white">
+              Clear All Expenses
+            </Text>
+          </TouchableOpacity>
         </View>
       </ScrollView>
     </SafeAreaView>
