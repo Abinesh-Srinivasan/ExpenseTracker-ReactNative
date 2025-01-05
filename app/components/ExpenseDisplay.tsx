@@ -125,7 +125,7 @@ const ExpenseDisplay: React.FC<ExpenseDisplayProps> = ({
 
   const handleEditSave = (editExpense: Expense) => {
     if (isNaN(editExpense.amount) || editExpense.amount <= 0) {
-      Alert.alert("Msg from Nesharo\nPlease Enter a Valid Amount");
+      Alert.alert("Msg from Nesharo","Please Enter a Valid Amount");
       return;
     }
     // check if the date is in the future
@@ -133,7 +133,7 @@ const ExpenseDisplay: React.FC<ExpenseDisplayProps> = ({
     const enteredDate = new Date(year, month - 1, day);
     const today = new Date();
     if (enteredDate > today) {
-      Alert.alert("Msg from Nesharo\nFuture date is not allowed");
+      Alert.alert("Msg from Nesharo","Future date is not allowed");
       return;
     }
     setExpenses((prev) =>

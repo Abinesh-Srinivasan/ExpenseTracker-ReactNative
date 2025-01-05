@@ -24,7 +24,7 @@ const BudgetDashboard = ({
   const handleBudgetSubmit = (field: string) => {
     const parsedValue = parseFloat(budgetLimitEntering);
     if (isNaN(parsedValue) || parsedValue <= 0) {
-      Alert.alert("Msg from Nesharo\nPlease Enter a Valid Budget Limit");
+      Alert.alert("Msg from Nesharo","Please Enter a Valid Budget Limit");
     }
     if (field === "This Month") {
       setBudgetLimitMonth(parseFloat(budgetLimitEntering));

@@ -227,7 +227,9 @@ export default function Index() {
           />
         )}
       </Tab.Screen>
-      <Tab.Screen name="Developer" component={DeveloperTab} />
+      <Tab.Screen name="Developer">
+        {() => <DeveloperTab expenses={expenses} setExpenses={setExpenses} />}
+      </Tab.Screen>
     </Tab.Navigator>
   );
 }

@@ -46,12 +46,12 @@ const ExpenseAdd: React.FC<ExpenseAddProps> = ({ onAddExpense }) => {
       !newExpense.date ||
       !newExpense.description
     ) {
-      Alert.alert("Msg from Nesharo:\nPlease fill all the details");
+      Alert.alert("Msg from Nesharo","Please fill all the details");
       return;
     }
 
     if (isNaN(newExpense.amount)) {
-      Alert.alert("Msg from Nesharo:\nPlease enter a valid amount");
+      Alert.alert("Msg from Nesharo","Please enter a valid amount");
       return;
     }
 
@@ -61,7 +61,7 @@ const ExpenseAdd: React.FC<ExpenseAddProps> = ({ onAddExpense }) => {
     const today = new Date();
 
     if (enteredDate > today) {
-      Alert.alert("Msg from Nesharo:\nFuture date is not allowed");
+      Alert.alert("Msg from Nesharo","Future date is not allowed");
       return;
     }
 

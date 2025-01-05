@@ -5,9 +5,12 @@ import {
   ScrollView,
   TouchableOpacity,
   Linking,
+  Alert,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as Animatable from "react-native-animatable";
+import * as Sharing from "expo-sharing";
+import * as FileSystem from "expo-file-system";
 import { useEffect, useState } from "react";
 
 const Abinesh = require("@/assets/images/abinesh.jpeg");
@@ -32,9 +35,23 @@ const qualities = [
   "Finance Buff",
 ];
 
-const DeveloperTab = () => {
+type Expense = {
+  id: number;
+  category: string;
+  amount: number;
+  date: string;
+  description: string;
+};
+
+interface DeveloperTabProps {
+  expenses: Expense[];
+  setExpenses: (value: Expense[]) => void;
+}
+
+const DeveloperTab = ({ expenses, setExpenses }: DeveloperTabProps) => {
   const [currentQuality, setCurrentQuality] = useState(0);
 
+  // used for text animation
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentQuality((prev) => (prev + 1) % qualities.length);
@@ -42,6 +59,70 @@ const DeveloperTab = () => {
 
     return () => clearInterval(interval);
   }, []);
+
+  const handleExportAllExpenses = async () => {
+    if (expenses.length === 0) {
+      Alert.alert("Msg from Nesharo", "No Expenses to Export");
+      return;
+    }
+    const csvHeader = "ID,Category,Amount,Date,Description\n";
+    const csvRows = expenses.map(
+      (expense) =>
+        `${expense.id},${expense.category},${expense.amount},${expense.date},${expense.description}`
+    );
+    const csvContent = csvHeader + csvRows.join("\n");
+
+    try {
+      // Save the CSV file in the app's private storage
+      const fileName = "Expenses.csv";
+      const fileUri = FileSystem.documentDirectory + fileName;
+
+      await FileSystem.writeAsStringAsync(fileUri, csvContent, {
+        encoding: FileSystem.EncodingType.UTF8,
+      });
+
+      // Share the file using the sharing apps on device
+      if (await Sharing.isAvailableAsync()) {
+        await Sharing.shareAsync(fileUri, {
+          mimeType: "text/csv",
+          dialogTitle: "Export Expenses",
+        });
+        // deleting temporary file after export
+        await FileSystem.deleteAsync(fileUri);
+      } else {
+        Alert.alert("Error", "Sorry, Sharing is not available on your device.");
+      }
+    } catch (error) {
+      console.error("Error exporting expenses:", error);
+      Alert.alert("Error", "An error occurred while exporting expenses.");
+    }
+  };
+
+  const handleClearAllExpenses = () => {
+    if (expenses.length === 0) {
+      Alert.alert("Msg from Nesharo", "No Expenses to Clear");
+      return;
+    }
+    Alert.alert(
+      "Confirmation",
+      "Do you want to delete all expenses? This action cannot be undone.",
+      [
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "Delete",
+          style: "destructive",
+          onPress: () => {
+            setExpenses([]);
+            Alert.alert(
+              "Msg from Nesharo",
+              "All Expenses cleared successfully"
+            );
+          },
+        },
+      ],
+      { cancelable: false }
+    );
+  };
 
   return (
     <SafeAreaView className=" h-full bg-white">
@@ -61,9 +142,7 @@ const DeveloperTab = () => {
               {qualities[currentQuality]}
             </Animatable.Text>
             <TouchableOpacity
-              onPress={() =>
-                Linking.openURL("https://abineshsrinivasan.netlify.app")
-              }
+              onPress={() => Linking.openURL("https://nesharo.netlify.app")}
               className=" flex flex-row items-center justify-center gap-1"
             >
               <Image source={Website} className=" size-6" />
@@ -169,12 +248,18 @@ const DeveloperTab = () => {
         </View>
         {/* delete and export data */}
         <View className=" mt-10 flex flex-col gap-3 items-center">
-          <TouchableOpacity className=" border border-transparent bg-green-500 rounded-lg w-4/6 py-2">
+          <TouchableOpacity
+            className=" border border-transparent bg-green-500 rounded-lg w-4/6 py-2"
+            onPress={handleExportAllExpenses}
+          >
             <Text className=" font-rubik-semibold text-2xl tracking-wide text-center text-white">
               Export All Expenses
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity className=" border border-transparent bg-red-500 rounded-lg w-4/6 py-2">
+          <TouchableOpacity
+            className=" border border-transparent bg-red-500 rounded-lg w-4/6 py-2"
+            onPress={handleClearAllExpenses}
+          >
             <Text className=" font-rubik-semibold text-2xl tracking-wide text-center text-white">
               Clear All Expenses
             </Text>
