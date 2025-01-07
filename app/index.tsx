@@ -1,5 +1,6 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Image, Keyboard, Text, View } from "react-native";
+import { Alert, Image, Keyboard, Text, View } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import DashboardTab from "./tabs/DashboardTab";
 import ExpensesTab from "./tabs/ExpensesTab";
@@ -29,7 +30,30 @@ export default function Index() {
 
   const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
 
+  const saveExpensesToStorage = async (expenses: Expense[]) => {
+    try {
+      await AsyncStorage.setItem("expenses", JSON.stringify(expenses));
+    } catch (error) {
+      console.log("Error in Saving Expenses:", error);
+      Alert.alert("Error", "Error occured in Saving the Expenses to Storage");
+    }
+  };
+
+  const loadExpensesFromStorage = async () => {
+    try {
+      const storedExpenses = await AsyncStorage.getItem("expenses");
+      if (storedExpenses) {
+        setExpenses(JSON.parse(storedExpenses));
+      }
+    } catch (error) {
+      console.log("Error in loading expenses:", error);
+      Alert.alert("Error", "Failed to load the expenses from storage");
+    }
+  };
+
   useEffect(() => {
+    loadExpensesFromStorage();
+
     const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
       setIsKeyboardVisible(true);
     });
@@ -78,6 +102,7 @@ export default function Index() {
   };
 
   useEffect(() => {
+    saveExpensesToStorage(expenses);
     categorizeExpenses();
   }, [expenses]);
 

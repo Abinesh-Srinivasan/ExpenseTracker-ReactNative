@@ -1,5 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, Alert } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 const BudgetDashboard = ({
   dashboardContent,
   budgetLimitMonth,
@@ -21,17 +23,72 @@ const BudgetDashboard = ({
 }) => {
   const [budgetLimitEntering, setBudgetLimitEntering] = useState("");
 
-  const handleBudgetSubmit = (field: string) => {
+  useEffect(() => {
+    const loadBudgetLimits = async () => {
+      try {
+        const storedBudgetLimitMonth = await AsyncStorage.getItem(
+          "budgetLimitMonth"
+        );
+        const storedBudgetLimitToday = await AsyncStorage.getItem(
+          "budgetLimitToday"
+        );
+        if (storedBudgetLimitMonth) {
+          setBudgetLimitMonth(parseFloat(storedBudgetLimitMonth));
+        }
+        if (storedBudgetLimitToday) {
+          setBudgetLimitToday(parseFloat(storedBudgetLimitToday));
+        }
+
+        const today = new Date();
+        const currentDay = today.toISOString().split("T")[0];
+        const currentMonth = today.getMonth();
+
+        const lastResetDate = await AsyncStorage.getItem("lastResetDate");
+        const lastResetMonth = await AsyncStorage.getItem("lastResetMonth");
+
+        if (lastResetDate !== currentDay) {
+          setBudgetLimitToday(0);
+          await AsyncStorage.setItem("budgetLimitToday", "0");
+          await AsyncStorage.setItem("lastResetDate", currentDay);
+        }
+
+        if (
+          lastResetMonth === null ||
+          parseInt(lastResetMonth) !== currentMonth
+        ) {
+          setBudgetLimitMonth(0);
+          await AsyncStorage.setItem("budgetLimitMonth", "0");
+          await AsyncStorage.setItem("lastResetMonth", currentMonth.toString());
+        }
+      } catch (error) {
+        console.error("Error loading or resetting budget limits:", error);
+      }
+    };
+
+    loadBudgetLimits();
+  }, []);
+
+  const handleBudgetSubmit = async (field: string) => {
     const parsedValue = parseFloat(budgetLimitEntering);
+
     if (isNaN(parsedValue) || parsedValue <= 0) {
-      Alert.alert("Msg from Nesharo","Please Enter a Valid Budget Limit");
+      Alert.alert("Msg from Nesharo", "Please Enter a Valid Budget Limit");
+      return;
     }
-    if (field === "This Month") {
-      setBudgetLimitMonth(parseFloat(budgetLimitEntering));
-    } else {
-      setBudgetLimitToday(parseFloat(budgetLimitEntering));
+
+    try {
+      if (field === "This Month") {
+        setBudgetLimitMonth(parsedValue);
+        await AsyncStorage.setItem("budgetLimitMonth", parsedValue.toString());
+      } else {
+        setBudgetLimitToday(parsedValue);
+        await AsyncStorage.setItem("budgetLimitToday", parsedValue.toString());
+      }
+      setBudgetLimitEntering("");
+    } catch (error) {
+      console.error("Error saving budget limit:", error);
+      Alert.alert("Error", "An error occurred while saving your budget limit.");
     }
-    setBudgetLimitEntering("");
   };
 
   const setBudgetLimitCard = (content: string) => (
@@ -57,17 +114,17 @@ const BudgetDashboard = ({
     </View>
   );
 
-  // rendering starts here
+  // Rendering logic
   if (dashboardContent === "This Month") {
     return (
       <View className=" flex items-center">
         {budgetLimitMonth > 0 ? (
           <View className=" mt-5 flex flex-col gap-4">
             <Text className=" text-2xl font-rubik-medium tracking-wider text-orange-500">
-              Budget Limit: {budgetLimitMonth.toFixed(2)}
+              Budget Limit: ₹.{budgetLimitMonth.toFixed(2)}
             </Text>
             <Text className=" text-2xl font-rubik-medium tracking-wider text-sky-500">
-              Expenses: {thisMonthExpensesTotal.toFixed(2)}
+              Expenses: ₹.{thisMonthExpensesTotal.toFixed(2)}
             </Text>
             <Text
               className={` text-2xl font-rubik-medium tracking-wider ${
@@ -76,7 +133,7 @@ const BudgetDashboard = ({
                   : "text-red-600"
               }`}
             >
-              Remaining:{" "}
+              Remaining: ₹.
               {(budgetLimitMonth - thisMonthExpensesTotal).toFixed(2)}
             </Text>
           </View>
@@ -119,10 +176,11 @@ const BudgetDashboard = ({
         Past Expenses: ₹.{pastExpensesTotal.toFixed(2)}
       </Text>
       <Text className=" font-rubik-regular text-slate-800 text-center">
-        Clear all the Data atleast once per Year through Developer Tab to reset the Past
-        Expenses{" "}
+        Clear all the Data at least once per Year through Developer Tab to reset
+        the Past Expenses{" "}
       </Text>
     </View>
   );
 };
+
 export default BudgetDashboard;
