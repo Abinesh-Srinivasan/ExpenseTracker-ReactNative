@@ -127,7 +127,7 @@ const DeveloperTab = ({ expenses, setExpenses }: DeveloperTabProps) => {
   return (
     <SafeAreaView className=" h-full bg-white">
       <ScrollView>
-        <View className="flex flex-col items-center mt-8 gap-3">
+        <View className="flex flex-col items-center mt-5 gap-3">
           <Image source={Abinesh} className=" size-64 rounded-full" />
           <View>
             <Text className=" font-rubik-bold text-3xl text-center">
@@ -153,11 +153,18 @@ const DeveloperTab = ({ expenses, setExpenses }: DeveloperTabProps) => {
           </View>
         </View>
         {/* quote */}
-        <View className=" mx-10 mt-3 items-center bg-sky-400 px-5 py-6 rounded-2xl">
-          <Text className="font-rubik-regular text-white tracking-wider text-center">
-            You're not a real programmer until you've spent at least a day
-            pulling your hair out over a bug that should have been easy to fix
-          </Text>
+        <View className=" mx-10 mt-3 bg-sky-400 px-7 py-5 rounded-2xl gap-2">
+          <View className=" items-center">
+            <Text className="font-rubik-regular text-white tracking-wider text-center text-lg">
+              If you don't find a way to make money while you sleep, you will
+              work until you die.
+            </Text>
+          </View>
+          <View className=" items-end">
+            <Text className="font-rubik-regular text-white tracking-wider text-lg">
+              - Warren Buffett
+            </Text>
+          </View>
         </View>
         {/* social media */}
         <View className=" mt-6">
@@ -247,7 +254,7 @@ const DeveloperTab = ({ expenses, setExpenses }: DeveloperTabProps) => {
           </View>
         </View>
         {/* delete and export data */}
-        <View className=" mt-10 flex flex-col gap-3 items-center">
+        <View className=" mt-8 flex flex-col gap-3 items-center">
           <TouchableOpacity
             className=" border border-transparent bg-green-500 rounded-lg w-4/6 py-2"
             onPress={handleExportAllExpenses}

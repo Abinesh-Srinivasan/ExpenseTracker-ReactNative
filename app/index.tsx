@@ -1,5 +1,5 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Image, Text, View } from "react-native";
+import { Image, Keyboard, Text, View } from "react-native";
 
 import DashboardTab from "./tabs/DashboardTab";
 import ExpensesTab from "./tabs/ExpensesTab";
@@ -21,120 +21,27 @@ export default function Index() {
     description: string;
   };
 
-  const [expenses, setExpenses] = useState<Expense[]>([
-    // {
-    //   id: 0,
-    //   category: "Abi",
-    //   amount: 150,
-    //   date: "04-01-2025",
-    //   description: "Hi, this is Nesharo",
-    // },
-    // {
-    //   id: 980,
-    //   category: "Farith",
-    //   amount: 150,
-    //   date: "04-01-2025",
-    //   description: "Hi, this is Nesharo",
-    // },
-    // {
-    //   id: 120,
-    //   category: "Diljaz",
-    //   amount: 150,
-    //   date: "04-01-2025",
-    //   description: "Hi, this is Nesharo",
-    // },
-    // {
-    //   id: 680,
-    //   category: "Suresh",
-    //   amount: 150,
-    //   date: "04-01-2025",
-    //   description: "Hi, this is Nesharo",
-    // },
-    // {
-    //   id: 560,
-    //   category: "Raja",
-    //   amount: 150,
-    //   date: "04-01-2025",
-    //   description: "Hi, this is Nesharo",
-    // },
-    // {
-    //   id: 340,
-    //   category: "Abhi",
-    //   amount: 150,
-    //   date: "04-01-2025",
-    //   description: "Hi, this is Nesharo",
-    // },
-    // {
-    //   id: 390,
-    //   category: "Food",
-    //   amount: 150,
-    //   date: "04-01-2025",
-    //   description: "Hi, this is Nesharo",
-    // },
-    // {
-    //   id: 10,
-    //   category: "Travel",
-    //   amount: 150,
-    //   date: "04-01-2025",
-    //   description: "Hi, this is Nesharo",
-    // },
-    // {
-    //   id: 100,
-    //   category: "Cinema",
-    //   amount: 150,
-    //   date: "04-01-2025",
-    //   description: "Hi, this is Nesharo",
-    // },
-    // {
-    //   id: 2,
-    //   category: "Stationary",
-    //   amount: 500,
-    //   date: "04-01-2025",
-    //   description: "Hi, this is Nesharo",
-    // },
-    // {
-    //   id: 20,
-    //   category: "Travel",
-    //   amount: 500,
-    //   date: "01-01-2025",
-    //   description: "Hi, this is Nesharo",
-    // },
-    // {
-    //   id: 200,
-    //   category: "Travel",
-    //   amount: 500,
-    //   date: "01-01-2025",
-    //   description: "Hi, this is Nesharo",
-    // },
-    // {
-    //   id: 3,
-    //   category: "Shopping",
-    //   amount: 200,
-    //   date: "13-10-2024",
-    //   description:
-    //     "Hi, this is Nesharo, hello, how are youshflsh, farith suresh ganesh raja diljaz abhimanyu, Hi, this is Nesharo, hello, how are youshflsh, Hi, this is Nesharo",
-    // },
-    // {
-    //   id: 30,
-    //   category: "Shopping",
-    //   amount: 200,
-    //   date: "13-10-2024",
-    //   description:
-    //     "Hi, this is Nesharo, hello, how are youshflsh, farith suresh ganesh raja diljaz abhimanyu, Hi, this is Nesharo, hello, how are youshflsh, Hi, this is Nesharo",
-    // },
-    // {
-    //   id: 300,
-    //   category: "Shopping",
-    //   amount: 200,
-    //   date: "13-10-2024",
-    //   description:
-    //     "Hi, this is Nesharo, hello, how are youshflsh, farith suresh ganesh raja diljaz abhimanyu, Hi, this is Nesharo, hello, how are youshflsh, Hi, this is Nesharo",
-    // },
-  ]);
+  const [expenses, setExpenses] = useState<Expense[]>([]);
 
   const [todayExpenses, setTodayExpenses] = useState<Expense[]>([]);
   const [thisMonthExpenses, setThisMonthExpenses] = useState<Expense[]>([]);
   const [pastExpenses, setPastExpenses] = useState<Expense[]>([]);
+
+  const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
+
+  useEffect(() => {
+    const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
+      setIsKeyboardVisible(true);
+    });
+    const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
+      setIsKeyboardVisible(false);
+    });
+
+    return () => {
+      showSubscription.remove();
+      hideSubscription.remove();
+    };
+  }, []);
 
   const categorizeExpenses = () => {
     const today = new Date();
@@ -179,12 +86,15 @@ export default function Index() {
       screenOptions={({ route }) => ({
         tabBarActiveTintColor: "blue",
         tabBarInactiveTintColor: "gray",
-        tabBarStyle: {
-          height: 70,
-          paddingBottom: 20,
-          paddingTop: 5,
-          backgroundColor: "#f8f9fa",
-        },
+        tabBarStyle: isKeyboardVisible
+          ? { display: "none" }
+          : {
+              display: "flex",
+              height: 70,
+              paddingBottom: 20,
+              paddingTop: 5,
+              backgroundColor: "#f8f9fa",
+            },
         tabBarLabelStyle: {
           fontSize: 12,
           fontFamily: "rubik-medium",

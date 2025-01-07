@@ -7,6 +7,7 @@ import {
   TextInput,
   SectionList,
   Alert,
+  Keyboard,
 } from "react-native";
 
 const editIcon = require("@/assets/images/ExpenseCardIcons/edit.png");
@@ -33,6 +34,8 @@ const ExpenseDisplay: React.FC<ExpenseDisplayProps> = ({
 
   const [showPopup, setShowPopup] = useState(false);
   const [popupItem, setPopupItem] = useState<Expense | null>(null);
+
+  const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
 
   const categorizeExpenses = () => {
     const today = new Date();
@@ -125,7 +128,7 @@ const ExpenseDisplay: React.FC<ExpenseDisplayProps> = ({
 
   const handleEditSave = (editExpense: Expense) => {
     if (isNaN(editExpense.amount) || editExpense.amount <= 0) {
-      Alert.alert("Msg from Nesharo","Please Enter a Valid Amount");
+      Alert.alert("Msg from Nesharo", "Please Enter a Valid Amount");
       return;
     }
     // check if the date is in the future
@@ -133,7 +136,7 @@ const ExpenseDisplay: React.FC<ExpenseDisplayProps> = ({
     const enteredDate = new Date(year, month - 1, day);
     const today = new Date();
     if (enteredDate > today) {
-      Alert.alert("Msg from Nesharo","Future date is not allowed");
+      Alert.alert("Msg from Nesharo", "Future date is not allowed");
       return;
     }
     setExpenses((prev) =>
@@ -196,6 +199,19 @@ const ExpenseDisplay: React.FC<ExpenseDisplayProps> = ({
     );
   };
 
+  useEffect(() => {
+    const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
+      setIsKeyboardVisible(true);
+    });
+    const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
+      setIsKeyboardVisible(false);
+    });
+    return () => {
+      showSubscription.remove();
+      hideSubscription.remove();
+    };
+  }, []);
+
   return (
     <View className=" px-6 mt-3">
       {expenses.length > 0 ? (
@@ -244,7 +260,11 @@ const ExpenseDisplay: React.FC<ExpenseDisplayProps> = ({
       )}
       {/* edit form */}
       {editExpense && (
-        <View className=" absolute top-28 w-11/12 left-10 bg-white h-[35rem] flex flex-col px-10 gap-10 py-8 shadow-black shadow-lg rounded-2xl z-20">
+        <View
+          className={`${
+            isKeyboardVisible ? "top-0" : "top-28"
+          } absolute w-11/12 left-10 bg-white h-[35rem] flex flex-col px-10 gap-10 py-8 shadow-black shadow-lg rounded-2xl z-20`}
+        >
           <Text className=" text-center font-rubik-bold text-2xl tracking-wide">
             Edit Expense{" "}
           </Text>
@@ -252,7 +272,7 @@ const ExpenseDisplay: React.FC<ExpenseDisplayProps> = ({
             <TextInput
               placeholder="Category"
               value={editExpense.category}
-              maxLength={10}
+              maxLength={12}
               onChangeText={(text) => handleEditChange("category", text)}
               className=" font-rubik-regular border border-gray-300 rounded-md pl-3"
             />

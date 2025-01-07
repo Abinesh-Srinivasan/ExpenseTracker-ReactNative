@@ -1,6 +1,13 @@
-import { View, Text, TouchableOpacity, TextInput, Alert } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  TextInput,
+  Alert,
+  Keyboard,
+} from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 type Expense = {
   id: number;
@@ -16,6 +23,7 @@ type ExpenseAddProps = {
 
 const ExpenseAdd: React.FC<ExpenseAddProps> = ({ onAddExpense }) => {
   const [showAddForm, setShowAddForm] = useState(false);
+  const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
   const [newExpense, setNewExpense] = useState<Expense>({
     id: Date.now(),
     category: "",
@@ -23,6 +31,20 @@ const ExpenseAdd: React.FC<ExpenseAddProps> = ({ onAddExpense }) => {
     date: "",
     description: "",
   });
+
+  useEffect(() => {
+    const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
+      setIsKeyboardVisible(true);
+    });
+    const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
+      setIsKeyboardVisible(false);
+    });
+
+    return () => {
+      showSubscription.remove();
+      hideSubscription.remove();
+    };
+  }, []);
 
   const handleEditChange = (field: string, value: string) => {
     if (field === "amount") {
@@ -46,12 +68,12 @@ const ExpenseAdd: React.FC<ExpenseAddProps> = ({ onAddExpense }) => {
       !newExpense.date ||
       !newExpense.description
     ) {
-      Alert.alert("Msg from Nesharo","Please fill all the details");
+      Alert.alert("Msg from Nesharo", "Please fill all the details");
       return;
     }
 
     if (isNaN(newExpense.amount)) {
-      Alert.alert("Msg from Nesharo","Please enter a valid amount");
+      Alert.alert("Msg from Nesharo", "Please enter a valid amount");
       return;
     }
 
@@ -61,7 +83,7 @@ const ExpenseAdd: React.FC<ExpenseAddProps> = ({ onAddExpense }) => {
     const today = new Date();
 
     if (enteredDate > today) {
-      Alert.alert("Msg from Nesharo","Future date is not allowed");
+      Alert.alert("Msg from Nesharo", "Future date is not allowed");
       return;
     }
 
@@ -91,7 +113,11 @@ const ExpenseAdd: React.FC<ExpenseAddProps> = ({ onAddExpense }) => {
       </View>
       {/* form */}
       {showAddForm && (
-        <View className="absolute top-44 bottom-56 left-8 bg-white h-[35rem] w-10/12 px-10 py-10 shadow-inherit shadow-lg flex flex-col rounded-2xl z-20 gap-8 items-center">
+        <View
+          className={`${
+            isKeyboardVisible ? "top-4" : "top-44"
+          } absolute left-8 bg-white h-[35rem] w-10/12 px-10 py-10 shadow-inherit shadow-lg flex flex-col rounded-2xl z-20 gap-8 items-center`}
+        >
           <Text className=" text-center font-rubik-bold text-3xl">
             Add Expense
           </Text>
@@ -99,7 +125,7 @@ const ExpenseAdd: React.FC<ExpenseAddProps> = ({ onAddExpense }) => {
             <TextInput
               value={newExpense.category}
               onChangeText={(text) => handleEditChange("category", text)}
-              maxLength={10}
+              maxLength={12}
               placeholder="Category"
               className="font-rubik-regular border border-gray-300 rounded-md pl-3"
             />
