@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, Alert } from "react-native";
 const YearlyExpenses = ({
   setDashboardContent,
 }: {
@@ -36,6 +36,25 @@ const YearlyExpenses = ({
       0
     );
     setTotalYearlyExpenses(total);
+  };
+
+  const clearYearlyExpenses = () => {
+    Alert.alert(
+      "Confirmation",
+      "Do you want to reset all the Monthly Expenses?",
+      [
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "Reset",
+          style: "destructive",
+          onPress: () => {
+            setMonthlyExpenses(new Array(12).fill(""));
+            setTotalYearlyExpenses("0");
+          },
+        },
+      ],
+      { cancelable: false }
+    );
   };
 
   return (
@@ -97,13 +116,7 @@ const YearlyExpenses = ({
               Calculate
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity
-            className=" mt-5"
-            onPress={() => {
-              setMonthlyExpenses(new Array(12).fill(""));
-              setTotalYearlyExpenses("0");
-            }}
-          >
+          <TouchableOpacity className=" mt-5" onPress={clearYearlyExpenses}>
             <Text className="font-rubik-semibold text-xl text-white bg-red-500 px-6 py-3 rounded-lg">
               Reset
             </Text>

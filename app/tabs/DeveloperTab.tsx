@@ -65,12 +65,13 @@ const DeveloperTab = ({ expenses, setExpenses }: DeveloperTabProps) => {
       Alert.alert("Msg from Nesharo", "No Expenses to Export");
       return;
     }
-    const csvHeader = "ID,Category,Amount,Date,Description\n";
+    const csvHeader = "Nesharo Expenses Report\n\n";
+    const csvColumn = "Category,Amount,Date,Description\n";
     const csvRows = expenses.map(
       (expense) =>
-        `${expense.id},${expense.category},${expense.amount},${expense.date},${expense.description}`
+        `${expense.category},${expense.amount},${expense.date},${expense.description}`
     );
-    const csvContent = csvHeader + csvRows.join("\n");
+    const csvContent = csvHeader + csvColumn + csvRows.join("\n");
 
     try {
       // Save the CSV file in the app's private storage
