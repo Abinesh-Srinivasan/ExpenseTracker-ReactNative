@@ -1,8 +1,6 @@
-import { Text } from "react-native";
 import ExpenseDisplay from "../components/ExpenseDisplay";
 import ExpenseAdd from "../components/ExpenseAdd";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useState } from "react";
 
 type Expense = {
   id: number;
@@ -12,13 +10,12 @@ type Expense = {
   description: string;
 };
 
-interface ExpenseTabProps{
-  expenses: Expense[],
-  setExpenses:React.Dispatch<React.SetStateAction<Expense[]>>
+interface ExpenseTabProps {
+  expenses: Expense[];
+  setExpenses: React.Dispatch<React.SetStateAction<Expense[]>>;
 }
 
-const ExpensesTab = ({expenses,setExpenses}:ExpenseTabProps) => {
-
+const ExpensesTab = ({ expenses, setExpenses }: ExpenseTabProps) => {
   const addExpense = (newExpense: Expense) => {
     setExpenses((prevExpenses) => [...prevExpenses, newExpense]);
   };

@@ -2,8 +2,12 @@ import { useState } from "react";
 import { View, Text, TouchableOpacity, FlatList } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
-const DashboardHeader = ({ dashboardContent, setDashboardContent }: {
-  dashboardContent:string,setDashboardContent:(value:string)=>void
+const DashboardHeader = ({
+  dashboardContent,
+  setDashboardContent,
+}: {
+  dashboardContent: string;
+  setDashboardContent: (value: string) => void;
 }) => {
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const items = [

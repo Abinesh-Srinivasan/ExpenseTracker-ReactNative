@@ -1,5 +1,5 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Alert, Image, Keyboard, Text, View } from "react-native";
+import { Alert, Image, Keyboard } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import DashboardTab from "./tabs/DashboardTab";

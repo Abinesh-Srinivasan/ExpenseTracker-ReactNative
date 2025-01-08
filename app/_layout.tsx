@@ -26,7 +26,7 @@ export default function RootLayout() {
   if (!fontsLoaded) {
     return (
       <View className=" flex items-center justify-center h-full">
-        <ActivityIndicator size="large" color="#0000ff"/>
+        <ActivityIndicator size="large" color="#0000ff" />
       </View>
     );
   }
