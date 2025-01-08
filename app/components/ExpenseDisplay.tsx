@@ -156,8 +156,6 @@ const ExpenseDisplay: React.FC<ExpenseDisplayProps> = ({
   };
 
   const renderExpenseCard = ({ item }: { item: Expense }) => {
-    // let date = item.date;
-    // item.date = date.split("-").reverse().join("-");
     return (
       <View className=" flex flex-row px-6 pb-4 items-center justify-between">
         {/* Category,Amount,Date */}
@@ -274,7 +272,7 @@ const ExpenseDisplay: React.FC<ExpenseDisplayProps> = ({
               value={editExpense.category}
               maxLength={12}
               onChangeText={(text) => handleEditChange("category", text)}
-              className=" font-rubik-regular border border-gray-300 rounded-md pl-3"
+              className=" font-rubik-regular border border-gray-300 rounded-md pl-3 py-3"
             />
             <TextInput
               placeholder="Amount"
@@ -282,7 +280,7 @@ const ExpenseDisplay: React.FC<ExpenseDisplayProps> = ({
               maxLength={10}
               onChangeText={(text) => handleEditChange("amount", text)}
               keyboardType="numeric"
-              className=" font-rubik-regular border border-gray-300 rounded-md pl-3"
+              className=" font-rubik-regular border border-gray-300 rounded-md pl-3 py-3"
             />
             <TextInput
               placeholder="DD-MM-YYYY"
@@ -290,7 +288,7 @@ const ExpenseDisplay: React.FC<ExpenseDisplayProps> = ({
               keyboardType="numeric"
               maxLength={10}
               onChangeText={(text) => handleEditChange("date", text)}
-              className=" font-rubik-regular border border-gray-300 rounded-md pl-3"
+              className=" font-rubik-regular border border-gray-300 rounded-md pl-3 py-3"
             />
             <TextInput
               placeholder="Description"
@@ -298,7 +296,7 @@ const ExpenseDisplay: React.FC<ExpenseDisplayProps> = ({
               multiline
               maxLength={157}
               onChangeText={(text) => handleEditChange("description", text)}
-              className=" font-rubik-regular border border-gray-300 rounded-md pl-3 h-32"
+              className=" font-rubik-regular border border-gray-300 rounded-md pl-3 h-32 py-3"
               style={{ textAlignVertical: "top" }}
             />
           </View>
