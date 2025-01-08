@@ -121,10 +121,10 @@ const BudgetDashboard = ({
         {budgetLimitMonth > 0 ? (
           <View className=" mt-5 flex flex-col gap-4">
             <Text className=" text-2xl font-rubik-medium tracking-wider text-orange-500">
-              Budget Limit: ₹.{budgetLimitMonth.toFixed(2)}
+              Budget Limit: ₹{budgetLimitMonth.toFixed(2)}
             </Text>
             <Text className=" text-2xl font-rubik-medium tracking-wider text-sky-500">
-              Expenses: ₹.{thisMonthExpensesTotal.toFixed(2)}
+              Expenses: ₹{thisMonthExpensesTotal.toFixed(2)}
             </Text>
             <Text
               className={` text-2xl font-rubik-medium tracking-wider ${
@@ -133,7 +133,7 @@ const BudgetDashboard = ({
                   : "text-red-600"
               }`}
             >
-              Remaining: ₹.
+              Remaining: ₹
               {(budgetLimitMonth - thisMonthExpensesTotal).toFixed(2)}
             </Text>
           </View>
@@ -173,7 +173,7 @@ const BudgetDashboard = ({
   return (
     <View className=" mt-8 mx-10 flex flex-col gap-3">
       <Text className=" text-2xl font-rubik-medium tracking-wider text-slate-600 text-center ">
-        Past Expenses: ₹.{pastExpensesTotal.toFixed(2)}
+        Past Expenses: ₹{pastExpensesTotal.toFixed(2)}
       </Text>
       <Text className=" font-rubik-regular text-slate-800 text-center">
         Clear all the Data at least once per Year through Developer Tab to reset

@@ -116,7 +116,7 @@ const DashboardTab = ({
       />
       <ScrollView>
         <Text className=" ml-5 mt-10 font-rubik-bold text-3xl text-blue-600 tracking-wide ">
-          Expense Computation
+          Expenses Computation
         </Text>
         <BudgetDashboard
           dashboardContent={dashboardContent}

@@ -166,7 +166,7 @@ const ExpenseDisplay: React.FC<ExpenseDisplayProps> = ({
             {item.category}
           </Text>
           <Text className=" text-blue-500 text-lg font-rubik-semibold">
-            ₹.{item.amount}
+            ₹{item.amount}
           </Text>
           <Text className=" tracking-wider font-rubik-semibold">
             {item.date}
@@ -244,7 +244,7 @@ const ExpenseDisplay: React.FC<ExpenseDisplayProps> = ({
                 {popupItem?.category}
               </Text>
               <Text className=" font-rubik-semibold text-blue-600 text-lg">
-                ₹.{popupItem?.amount}
+                ₹{popupItem?.amount}
               </Text>
             </View>
             <Text className=" font-rubik-regular leading-6 tracking-wide text-gray-700">

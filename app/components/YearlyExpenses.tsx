@@ -159,7 +159,7 @@ const YearlyExpenses = ({
             Total:
           </Text>
           <Text className="font-rubik-medium tracking-wide text-3xl">
-            ₹.{totalYearlyExpenses}
+            ₹{totalYearlyExpenses}
           </Text>
         </View>
         <View className="flex flex-row gap-10 items-center">
