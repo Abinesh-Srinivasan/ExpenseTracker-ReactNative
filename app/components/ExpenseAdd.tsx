@@ -127,7 +127,7 @@ const ExpenseAdd: React.FC<ExpenseAddProps> = ({ onAddExpense }) => {
               onChangeText={(text) => handleEditChange("category", text)}
               maxLength={12}
               placeholder="Category"
-              className="font-rubik-regular border border-gray-300 rounded-md pl-3 py-3"
+              className="font-rubik-regular border border-gray-300 rounded-md pl-3"
             />
             <TextInput
               value={newExpense.amount.toString()}
@@ -135,7 +135,7 @@ const ExpenseAdd: React.FC<ExpenseAddProps> = ({ onAddExpense }) => {
               maxLength={10}
               keyboardType="numeric"
               placeholder="Amount"
-              className="font-rubik-regular border border-gray-300 rounded-md pl-3 py-3"
+              className="font-rubik-regular border border-gray-300 rounded-md pl-3"
             />
             <TextInput
               value={newExpense.date}
@@ -143,7 +143,7 @@ const ExpenseAdd: React.FC<ExpenseAddProps> = ({ onAddExpense }) => {
               maxLength={10}
               keyboardType="numeric"
               placeholder="DD-MM-YYYY"
-              className="font-rubik-regular border border-gray-300 rounded-md pl-3 py-3"
+              className="font-rubik-regular border border-gray-300 rounded-md pl-3"
             />
             <TextInput
               value={newExpense.description}
@@ -151,7 +151,7 @@ const ExpenseAdd: React.FC<ExpenseAddProps> = ({ onAddExpense }) => {
               maxLength={157}
               multiline
               placeholder="Description"
-              className="font-rubik-regular border border-gray-300 rounded-md pl-3 h-32 py-3"
+              className="font-rubik-regular border border-gray-300 rounded-md pl-3 h-32"
               style={{ textAlignVertical: "top" }}
             />
           </View>

@@ -32,8 +32,12 @@ const BudgetDashboard = ({
         const storedBudgetLimitToday = await AsyncStorage.getItem(
           "budgetLimitToday"
         );
-        setBudgetLimitMonth(parseFloat(storedBudgetLimitMonth || "0"));
-        setBudgetLimitToday(parseFloat(storedBudgetLimitToday || "0"));
+        if (storedBudgetLimitMonth) {
+          setBudgetLimitMonth(parseFloat(storedBudgetLimitMonth));
+        }
+        if (storedBudgetLimitToday) {
+          setBudgetLimitToday(parseFloat(storedBudgetLimitToday));
+        }
 
         const today = new Date();
         const currentDay = today.toISOString().split("T")[0];
@@ -99,7 +103,7 @@ const BudgetDashboard = ({
           maxLength={10}
           keyboardType="numeric"
           placeholder="Can't Edit later"
-          className=" border rounded-lg border-gray-300 w-40 pl-3 font-rubik-regular py-3"
+          className=" border rounded-lg border-gray-300 w-40 pl-3 font-rubik-regular"
         />
         <TouchableOpacity onPress={() => handleBudgetSubmit(dashboardContent)}>
           <Text className=" bg-green-500 font-rubik-medium text-white w-20 text-center py-3 rounded-lg">

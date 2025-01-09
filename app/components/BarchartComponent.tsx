@@ -1,5 +1,5 @@
 import { View, Text, ScrollView } from "react-native";
-import CustomBarChart from "./CustomBarChart";
+import { BarChart } from "react-native-chart-kit";
 
 const BarchartComponent = ({ data }: { data: number[] }) => {
   const chartWidth = data.length * 40;
@@ -24,7 +24,7 @@ const BarchartComponent = ({ data }: { data: number[] }) => {
         showsHorizontalScrollIndicator={false}
         className=" mx-5"
       >
-        <CustomBarChart
+        <BarChart
           data={{
             labels: Array.from({ length: data.length }, (_, i) =>
               (i + 1).toString()
