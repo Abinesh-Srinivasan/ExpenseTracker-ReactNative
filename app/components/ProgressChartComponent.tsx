@@ -42,7 +42,7 @@ const ProgressChartComponent = ({ data }: ProgressChartComponentProps) => {
                 {item.name}
               </Text>
               <Text className="text-slate-700 font-rubik-medium tracking-wider">
-                ₹.{item.amount}
+                ₹{item.amount}
               </Text>
             </View>
 

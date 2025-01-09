@@ -145,10 +145,10 @@ const BudgetDashboard = ({
         {budgetLimitToday > 0 ? (
           <View className=" mt-5 flex flex-col gap-4">
             <Text className=" text-2xl font-rubik-medium tracking-wider text-orange-500">
-              Budget Limit: ₹.{budgetLimitToday.toFixed(2)}
+              Budget Limit: ₹{budgetLimitToday.toFixed(2)}
             </Text>
             <Text className=" text-2xl font-rubik-medium tracking-wider text-sky-500">
-              Expenses: ₹.{todayExpensesTotal.toFixed(2)}
+              Expenses: ₹{todayExpensesTotal.toFixed(2)}
             </Text>
             <Text
               className={` text-2xl font-rubik-medium tracking-wider ${
@@ -157,7 +157,7 @@ const BudgetDashboard = ({
                   : "text-red-600"
               }`}
             >
-              Remaining: ₹.{(budgetLimitToday - todayExpensesTotal).toFixed(2)}
+              Remaining: ₹{(budgetLimitToday - todayExpensesTotal).toFixed(2)}
             </Text>
           </View>
         ) : (

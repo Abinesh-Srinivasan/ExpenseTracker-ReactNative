@@ -37,3 +37,6 @@ yarn-error.*
 *.tsbuildinfo
 
 app-example
+
+# Nesharo hiding some sensitive files
+app.json

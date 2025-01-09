@@ -22,7 +22,7 @@ const DashboardHeader = ({
   };
   return (
     <View className=" mt-10 pl-5 pr-5 flex flex-row w-full justify-between items-center">
-      <Text className=" w-1/2 font-rubik-extrabold text-4xl text-violet-600">
+      <Text className=" w-1/2 font-rubik-extrabold text-3xl text-violet-600">
         Dashboard
       </Text>
       <View className=" w-1/2 flex items-end">
